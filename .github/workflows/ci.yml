@@ -17,7 +17,7 @@ jobs:
         env:
           POSTGRES_DB: app
           POSTGRES_USER: app
-          POSTGRES_PASSWORD: !ChangeMe!
+          POSTGRES_PASSWORD: symfony
         ports: [ "5432:5432" ]
         options: >-
           --health-cmd "pg_isready -U symfony -d symfony"
