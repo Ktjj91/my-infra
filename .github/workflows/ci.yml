@@ -16,9 +16,9 @@ jobs:
       db:
         image: postgres:16-alpine
         env:
-          POSTGRES_DB: symfony
-          POSTGRES_USER: symfony
-          POSTGRES_PASSWORD: symfony
+          POSTGRES_DB: app
+          POSTGRES_USER: app
+          POSTGRES_PASSWORD: !ChangeMe!
         ports: [ "5432:5432" ]
         options: >-
           --health-cmd "pg_isready -U symfony -d symfony"
@@ -40,7 +40,7 @@ jobs:
       - name: PHPUnit
         working-directory: ./dashboard-api
         env:
-          DATABASE_URL: "pgsql://symfony:symfony@127.0.0.1:5432/symfony"
+          DATABASE_URL: "postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=16&charset=utf8"
         run: vendor/bin/phpunit --fail-on-warning --testdox
 
   # 2) Front : lint, unit tests
@@ -102,7 +102,7 @@ jobs:
           --health-interval 10s
           --health-retries 5
       api:
-        image: ${{ secrets.DOCKERHUB_USERNAME }}/dashboard-api:latest
+        image: kingsley91/dashboard-api:latest
         env:
           DATABASE_URL: "postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=16&charset=utf8"
         ports: ['8000:9000']
@@ -110,7 +110,7 @@ jobs:
           postgres:
             condition: service_healthy
       front:
-        image: ${{ secrets.DOCKERHUB_USERNAME }}/dashboard-app:latest
+        image: kingsley91/dashboard-app:latest
         ports: ['4200:80']
         depends_on:
           api:
